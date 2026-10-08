@@ -1,0 +1,128 @@
+@import 'tailwindcss';
+
+/*
+ * VoiceDesk design tokens.
+ * Every colour used by components comes from this block; see docs/DESIGN_SYSTEM.md
+ * for measured contrast ratios and usage rules.
+ */
+@theme {
+  --font-sans: 'Inter Variable', 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, sans-serif;
+  --font-mono: ui-monospace, 'SFMono-Regular', 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+
+  --color-canvas: #f5f7fa;
+  --color-surface: #ffffff;
+  --color-subtle: #f8fafc;
+  --color-ink: #122033;
+  --color-muted: #5d6b7c;
+  --color-line: #e2e8f0;
+  --color-line-strong: #cbd5e1;
+  --color-control: #7d8a9b;
+
+  --color-sidebar: #101d31;
+  --color-sidebar-raised: #1a2a42;
+  --color-sidebar-muted: #b6c5d7;
+  --color-sidebar-accent: #2bb3a3;
+
+  --color-brand: #087f74;
+  --color-brand-hover: #06665d;
+  --color-brand-strong: #06665d;
+  --color-brand-soft: #e8f5f1;
+
+  --color-warn: #8a5c00;
+  --color-warn-soft: #fff4df;
+  --color-error: #b42318;
+  --color-error-soft: #fef3f2;
+  --color-info: #1e4fa3;
+  --color-info-soft: #eef3fc;
+  --color-neutral: #475467;
+  --color-neutral-soft: #f2f4f7;
+
+  --radius-control: 0.5rem;
+  --radius-card: 0.875rem;
+
+  --shadow-card: 0 1px 2px rgb(18 32 51 / 0.04), 0 2px 8px -2px rgb(18 32 51 / 0.06);
+  --shadow-overlay: 0 12px 32px -8px rgb(18 32 51 / 0.28);
+
+  --animate-field-flash: field-flash 1.6s ease-out 1;
+  --animate-fade-in: fade-in 180ms ease-out 1;
+  --animate-voice-bar: voice-bar 900ms ease-in-out infinite;
+
+  @keyframes field-flash {
+    0% {
+      background-color: var(--color-brand-soft);
+    }
+    100% {
+      background-color: transparent;
+    }
+  }
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes voice-bar {
+    0%,
+    100% {
+      transform: scaleY(0.35);
+    }
+    50% {
+      transform: scaleY(1);
+    }
+  }
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-canvas text-ink font-sans antialiased;
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    font-feature-settings: 'cv11', 'ss01';
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 2px;
+  }
+  .on-dark :focus-visible,
+  .on-dark:focus-visible {
+    outline-color: var(--color-sidebar-accent);
+  }
+  ::selection {
+    background: #c6ebe3;
+  }
+  dialog::backdrop {
+    background: rgb(16 29 49 / 0.55);
+  }
+  [hidden] {
+    display: none !important;
+  }
+}
+
+/* Reduced motion: honoured from the OS setting unless the presenter overrides it in Settings. */
+@media (prefers-reduced-motion: reduce) {
+  html:not([data-motion='allow']) *,
+  html:not([data-motion='allow']) *::before,
+  html:not([data-motion='allow']) *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+html[data-motion='reduce'] *,
+html[data-motion='reduce'] *::before,
+html[data-motion='reduce'] *::after {
+  animation-duration: 1ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 1ms !important;
+  scroll-behavior: auto !important;
+}
