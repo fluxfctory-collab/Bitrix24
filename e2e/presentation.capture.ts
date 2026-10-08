@@ -1,6 +1,6 @@
 /**
- * Presentation slides: one designed slide per key screen, with an Arabic title
- * and short description above a framed screenshot. Run with `npm run presentation`.
+ * Presentation slides: one designed slide per key screen, with a title and a
+ * short description above a framed screenshot. Run with `npm run presentation`.
  * Output: docs/presentation/NN-*.png and docs/presentation/VoiceDesk-Phase1-Screens.pdf
  */
 import { mkdir, readFile } from 'node:fs/promises'
@@ -14,6 +14,7 @@ const require = createRequire(import.meta.url)
 
 interface ScreenSlide {
   file: string
+  /** Short label listed on the cover. */
   name: string
   path: string
   title: string
@@ -26,21 +27,21 @@ interface ScreenSlide {
 const SLIDES: ScreenSlide[] = [
   {
     file: '01-demo-studio-conversation',
-    name: 'Demo Studio',
+    name: 'Demo Studio · Conversation',
     path: '/demo',
-    title: 'استوديو العرض — أثناء المحادثة',
+    title: 'Demo Studio — conversation in progress',
     description:
-      'يطرح الروبوت ثلاثة أسئلة قصيرة؛ تظهر كل إجابة في نص المحادثة وتُملأ الحقول المستخرجة تدريجيًا في اللوحة الجانبية، مع إظهار وضع المحاكاة بوضوح.',
+      'The bot asks three short questions. Each answer appears in the transcript while the captured details fill in on the right. Simulation mode is always clearly marked.',
     kind: 'desktop',
     images: ['demo-progress'],
   },
   {
     file: '02-demo-studio-result',
-    name: 'Demo Studio',
+    name: 'Demo Studio · Result',
     path: '/demo',
-    title: 'استوديو العرض — النتيجة النهائية',
+    title: 'Demo Studio — final result',
     description:
-      'بعد آخر إجابة تُراجَع البيانات وتظهر نتيجة CRM بمعرّف تجريبي. النتيجة محاكاة، ولا يُنشأ أي سجل فعلي في Bitrix24 في هذه المرحلة.',
+      'After the last answer the details are finalised and a CRM result appears with a synthetic ID. The result is simulated: no record is created in Bitrix24 in this phase.',
     kind: 'desktop',
     images: ['demo-completed'],
   },
@@ -48,19 +49,20 @@ const SLIDES: ScreenSlide[] = [
     file: '03-demo-studio-mobile',
     name: 'Demo Studio · Mobile',
     path: '/demo',
-    title: 'استوديو العرض على الجوال',
-    description: 'واجهة متجاوبة: يبقى السؤال الحالي وأزرار الإجابة في متناول اليد، ثم تأتي البيانات المستخرجة ونتيجة CRM.',
+    title: 'Demo Studio on mobile',
+    description:
+      'Responsive layout: the current question and the answer controls stay within reach, followed by the captured details and the CRM result.',
     kind: 'mobile',
     images: ['mobile-progress', 'mobile-details'],
-    captions: ['أثناء المحادثة', 'البيانات المستخرجة'],
+    captions: ['During the conversation', 'Captured details'],
   },
   {
     file: '04-overview',
     name: 'Overview',
     path: '/dashboard',
-    title: 'لوحة المتابعة — نظرة عامة',
+    title: 'Dashboard overview',
     description:
-      'مؤشرات محسوبة من بيانات العينة نفسها، وأحدث المكالمات، وتقدّم الإعداد حسب المراحل، وحالة الربط مع الهاتف وBitrix24.',
+      'Metrics derived from the same sample sessions, recent calls, setup progress by phase, and the connection status for phone, NLP and Bitrix24.',
     kind: 'desktop',
     images: ['overview'],
   },
@@ -68,9 +70,9 @@ const SLIDES: ScreenSlide[] = [
     file: '05-call-history',
     name: 'Call History',
     path: '/dashboard/calls',
-    title: 'سجل المكالمات',
+    title: 'Call history',
     description:
-      'بحث وتصفية حسب وضع التشغيل ونتيجة المحادثة ونتيجة CRM كلٌّ على حدة، مع الترتيب وتصدير البيانات التجريبية بصيغة JSON.',
+      'Search and filter by mode, conversation outcome and CRM outcome separately, with sorting and JSON export of the demo data.',
     kind: 'desktop',
     images: ['call-history'],
   },
@@ -78,9 +80,9 @@ const SLIDES: ScreenSlide[] = [
     file: '06-call-details',
     name: 'Call Details',
     path: '/dashboard/calls/SAMPLE-1004',
-    title: 'تفاصيل المكالمة',
+    title: 'Call details',
     description:
-      'نص المحادثة كاملًا، والحقول المستخرجة، وسجل الأحداث بما فيه الإجابات غير الواضحة وإعادة السؤال، مع إمكانية إعادة عرض الجلسة.',
+      'The full transcript, the captured fields and an event timeline, including unclear answers and re-prompts, with a replay of the sample session.',
     kind: 'desktop',
     images: ['call-details'],
   },
@@ -88,9 +90,9 @@ const SLIDES: ScreenSlide[] = [
     file: '07-agent-setup',
     name: 'Agent Setup',
     path: '/dashboard/agent',
-    title: 'إعداد الوكيل',
+    title: 'Agent setup',
     description:
-      'تعديل اسم الوكيل ورسالة الترحيب والأسئلة الثلاثة وترتيبها ورسائل التوضيح والختام، مع معاينة فورية. التعديلات تخص النموذج التجريبي فقط.',
+      'Edit the agent name, greeting, the three ordered questions and the clarification and closing messages, with a live preview. Changes affect the prototype only.',
     kind: 'desktop',
     images: ['agent-setup'],
   },
@@ -98,9 +100,9 @@ const SLIDES: ScreenSlide[] = [
     file: '08-integrations',
     name: 'Integrations',
     path: '/dashboard/integrations',
-    title: 'التكاملات',
+    title: 'Integrations',
     description:
-      'حالة كل ربط معروضة بصدق: الهاتف غير مُعدّ، والاستخراج بالمحاكاة، وBitrix24 غير متصل، مع معاينة ربط الحقول وما ستوفّره المراحل القادمة.',
+      'Every connection is shown honestly: phone not configured, extraction simulated, Bitrix24 not connected, plus a field-mapping preview and what later phases deliver.',
     kind: 'desktop',
     images: ['integrations'],
   },
@@ -108,9 +110,9 @@ const SLIDES: ScreenSlide[] = [
     file: '09-settings',
     name: 'Settings',
     path: '/dashboard/settings',
-    title: 'الإعدادات',
+    title: 'Settings',
     description:
-      'قراءة عبارات الروبوت بصوت مسموع، وسرعة العرض، وتقليل الحركة، وإعادة تعيين مساحة العمل التجريبية وإعدادات الوكيل الافتراضية.',
+      'Spoken bot prompts, demo pacing and reduced motion, plus resets for the sample workspace and the default agent wording.',
     kind: 'desktop',
     images: ['settings'],
   },
@@ -118,9 +120,9 @@ const SLIDES: ScreenSlide[] = [
 
 const COVER = {
   file: '00-cover',
-  title: 'أهم واجهات المرحلة الأولى',
+  title: 'Phase 1 — key screens',
   description:
-    'روبوت صوتي يطرح ثلاثة أسئلة، ويستخرج الخدمة المطلوبة واسم الشركة وطريقة التواصل، ثم يُحضّر عميلًا محتملًا في Bitrix24. هذا نموذج عرض تفاعلي: الإجابات الموجَّهة والاستخراج ونتيجة CRM كلها محاكاة.',
+    'A voice bot asks three short questions, extracts the requested service, company name and contact preference, and prepares a Bitrix24 lead. This is an interactive presentation prototype: guided answers, extraction and the CRM result are all simulated.',
 }
 
 // ---------------------------------------------------------------- raw captures
@@ -187,20 +189,16 @@ async function captureRaw(browser: Browser, baseURL: string) {
 
 // ---------------------------------------------------------------- slide rendering
 
-const FONT_DIR = require.resolve('@fontsource/ibm-plex-sans-arabic/package.json').replace(/package\.json$/, 'files/')
+const FONT_DIR = require.resolve('@fontsource-variable/inter/package.json').replace(/package\.json$/, 'files/')
 
 async function fontFaces(): Promise<string> {
   const faces: string[] = []
-  for (const weight of [400, 500, 600, 700]) {
-    for (const subset of ['arabic', 'latin']) {
-      const data = await readFile(`${FONT_DIR}ibm-plex-sans-arabic-${subset}-${weight}-normal.woff2`)
-      faces.push(
-        `@font-face{font-family:'Plex Arabic';font-weight:${weight};font-style:normal;font-display:block;` +
-          `src:url(data:font/woff2;base64,${data.toString('base64')}) format('woff2');` +
-          (subset === 'arabic' ? 'unicode-range:U+0600-06FF,U+0750-077F,U+0870-088E,U+0890-0891,U+0898-08E1,U+08E3-08FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE70-FE74,U+FE76-FEFC;' : '') +
-          '}',
-      )
-    }
+  for (const subset of ['latin']) {
+    const data = await readFile(`${FONT_DIR}inter-${subset}-wght-normal.woff2`)
+    faces.push(
+      `@font-face{font-family:'Inter Slides';font-weight:100 900;font-style:normal;font-display:block;` +
+        `src:url(data:font/woff2;base64,${data.toString('base64')}) format('woff2-variations');}`,
+    )
   }
   return faces.join('\n')
 }
@@ -210,7 +208,7 @@ const MARK = `<svg viewBox="0 0 32 32" width="40" height="40" aria-hidden="true"
 const STYLES = `
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{background:#F5F7FA}
-body{font-family:'Plex Arabic',system-ui,sans-serif;color:#122033;-webkit-font-smoothing:antialiased}
+body{font-family:'Inter Slides',system-ui,sans-serif;font-feature-settings:'cv11','ss01';color:#122033;-webkit-font-smoothing:antialiased}
 .slide{position:relative;width:1920px;height:1080px;overflow:hidden;background:
   radial-gradient(900px 520px at 88% -8%, rgba(8,127,116,.13), transparent 70%),
   radial-gradient(760px 480px at 6% 108%, rgba(16,29,49,.08), transparent 70%),
@@ -224,16 +222,16 @@ header{display:flex;justify-content:space-between;align-items:flex-end;gap:48px;
 .num{display:inline-flex;align-items:center;justify-content:center;min-width:40px;height:32px;padding:0 10px;border-radius:999px;background:#087F74;color:#fff;font-weight:600;font-size:15px;letter-spacing:.02em}
 .pill{display:inline-flex;align-items:center;gap:8px;height:32px;padding:0 14px;border-radius:999px;background:#fff;border:1px solid #E2E8F0;font-size:15px;font-weight:500;color:#122033}
 .pill code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13.5px;color:#5D6B7C}
-h1{font-size:42px;line-height:1.25;font-weight:700;letter-spacing:-.005em;text-wrap:balance}
-p.desc{margin-top:10px;font-size:20.5px;line-height:1.65;color:#5D6B7C;max-width:880px;text-wrap:pretty}
+h1{font-size:44px;line-height:1.2;font-weight:700;letter-spacing:-.022em;text-wrap:balance}
+p.desc{margin-top:12px;font-size:20px;line-height:1.55;color:#5D6B7C;max-width:860px;text-wrap:pretty}
 .brand{display:flex;flex-direction:column;align-items:flex-end;gap:10px;flex-shrink:0;padding-bottom:6px}
-.brand .lock{display:flex;align-items:center;gap:10px;direction:ltr}
+.brand .lock{display:flex;align-items:center;gap:10px}
 .brand .lock b{font-size:21px;font-weight:700;letter-spacing:-.01em}
 .brand .lock span{display:block;font-size:13px;color:#5D6B7C;font-weight:500}
 .chip{display:inline-flex;align-items:center;height:28px;padding:0 12px;border-radius:999px;background:#FFF4DF;color:#8A5C00;font-size:14px;font-weight:600}
 .browser{margin-top:26px;width:1200px;border-radius:16px;overflow:hidden;background:#fff;
   box-shadow:0 0 0 1px rgba(16,29,49,.08),0 28px 60px -24px rgba(16,29,49,.38),0 8px 18px -10px rgba(16,29,49,.18)}
-.bar{direction:ltr;display:flex;align-items:center;gap:16px;height:40px;padding:0 16px;background:#EDF1F5;border-bottom:1px solid #E2E8F0}
+.bar{display:flex;align-items:center;gap:16px;height:40px;padding:0 16px;background:#EDF1F5;border-bottom:1px solid #E2E8F0}
 .dots{display:flex;gap:8px}.dots i{width:12px;height:12px;border-radius:50%;background:#CBD5E1;display:block}
 .url{flex:1;display:flex;justify-content:center}
 .url span{min-width:420px;text-align:center;height:24px;line-height:24px;padding:0 14px;border-radius:7px;background:#fff;color:#5D6B7C;font-size:13px;font-family:ui-monospace,Menlo,Consolas,monospace}
@@ -242,15 +240,15 @@ p.desc{margin-top:10px;font-size:20.5px;line-height:1.65;color:#5D6B7C;max-width
 .phone{display:flex;flex-direction:column;align-items:center;gap:14px}
 .device{padding:11px;border-radius:50px;background:#101D31;box-shadow:0 28px 60px -24px rgba(16,29,49,.45),0 0 0 1px rgba(16,29,49,.2)}
 .device img{display:block;width:330px;height:714px;border-radius:39px}
-.caption{direction:rtl;height:32px;line-height:32px;padding:0 16px;border-radius:999px;background:#fff;border:1px solid #E2E8F0;font-size:16px;font-weight:600}
+.caption{height:32px;line-height:32px;padding:0 16px;border-radius:999px;background:#fff;border:1px solid #E2E8F0;font-size:16px;font-weight:600}
 .cover{display:flex;align-items:center;justify-content:center}
 .cover .center{position:relative;width:1240px;text-align:center;display:flex;flex-direction:column;align-items:center}
-.cover .lock{display:flex;align-items:center;gap:16px;direction:ltr;margin-bottom:34px}
+.cover .lock{display:flex;align-items:center;gap:16px;margin-bottom:34px}
 .cover .lock svg{width:72px;height:72px}
 .cover .lock b{font-size:46px;font-weight:700;letter-spacing:-.015em}
-.cover h1{font-size:64px}
+.cover h1{font-size:64px;letter-spacing:-.03em}
 .cover p.desc{font-size:25px;max-width:1060px;margin-top:22px;text-wrap:balance}
-.cover .list{margin-top:42px;display:flex;flex-wrap:wrap;justify-content:center;gap:12px;max-width:1100px;direction:ltr}
+.cover .list{margin-top:42px;display:flex;flex-wrap:wrap;justify-content:center;gap:12px;max-width:1100px}
 .cover .list span{height:38px;line-height:38px;padding:0 16px;border-radius:999px;background:#fff;border:1px solid #E2E8F0;font-size:16.5px;font-weight:500}
 .cover .chip{margin-top:36px;height:36px;font-size:17px;padding:0 18px}
 `
@@ -263,7 +261,7 @@ async function imageData(name: string) {
 
 function brandBlock() {
   return `<div class="brand"><div class="lock">${MARK}<div><b>VoiceDesk</b><span>AI Voice Bot / Bitrix24</span></div></div>
-    <span class="chip">المرحلة الأولى · بيانات تجريبية</span></div>`
+    <span class="chip">Phase 1 · Sample data</span></div>`
 }
 
 async function screenSlideHtml(slide: ScreenSlide, index: number) {
@@ -282,7 +280,7 @@ async function screenSlideHtml(slide: ScreenSlide, index: number) {
   return `<section class="slide"><div class="inner">
     <header>
       <div class="text">
-        <div class="meta"><span class="num">${String(index).padStart(2, '0')}</span><span class="pill" dir="ltr">${esc(slide.name)} <code>${esc(slide.path)}</code></span></div>
+        <div class="meta"><span class="num">${String(index).padStart(2, '0')}</span><span class="pill"><code>${esc(slide.path)}</code></span></div>
         <h1>${esc(slide.title)}</h1>
         <p class="desc">${esc(slide.description)}</p>
       </div>
@@ -299,12 +297,12 @@ function coverHtml() {
     <h1>${esc(COVER.title)}</h1>
     <p class="desc">${esc(COVER.description)}</p>
     <div class="list">${names.join('')}</div>
-    <span class="chip">المرحلة الأولى · نموذج عرض تفاعلي · بيانات تجريبية</span>
+    <span class="chip">Phase 1 · Interactive prototype · Sample data</span>
   </div></section>`
 }
 
 function documentHtml(fonts: string, body: string) {
-  return `<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><style>${fonts}${STYLES}</style></head><body>${body}</body></html>`
+  return `<!doctype html><html lang="en" dir="ltr"><head><meta charset="utf-8"><style>${fonts}${STYLES}</style></head><body>${body}</body></html>`
 }
 
 test('presentation slides', async ({ browser, baseURL }) => {

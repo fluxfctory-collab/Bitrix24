@@ -14,7 +14,7 @@ Recorded on 2026-10-08 in a Linux container with Node.js 22.22.0, npm 10.9.4 and
 | `PW_CHROMIUM_EXECUTABLE=/opt/pw-browsers/chromium npm run test:e2e` | **23 tests passed** |
 | same, with `--repeat-each=5 --workers=3` | **115 / 115 passed**, no flaky tests |
 | `PW_CHROMIUM_EXECUTABLE=/opt/pw-browsers/chromium npm run screenshots` | 11 capture runs passed; 22 images written to `docs/screenshots/` |
-| `PW_CHROMIUM_EXECUTABLE=/opt/pw-browsers/chromium npm run presentation` | Passed; 10 slides (2880×1620 PNG) and a 10-page PDF written to `docs/presentation/` |
+| `PW_CHROMIUM_EXECUTABLE=/opt/pw-browsers/chromium npm run presentation` | Passed; 10 English slides (2880×1620 PNG) and a 10-page PDF written to `docs/presentation/` |
 | e2e suite after the Call History fix below, `--repeat-each=3 --workers=3` | **69 / 69 passed** |
 
 `npm run check` runs lint, typecheck, unit tests and build in sequence (exit 0).
@@ -81,6 +81,6 @@ Issues found during review and fixed before delivery: the primary demo action fa
 - **Browsers other than Chromium** (Safari, Firefox, Edge) and real mobile devices were not run. Firefox is expected to show the unsupported state.
 - **Screen readers** (VoiceOver, NVDA) were not run manually. Semantics were checked through Playwright's accessibility queries (roles, names, descriptions, `aria-current`, `aria-sort`, `aria-disabled`).
 - **Browser-level 200 % zoom** was approximated by the 720 px viewport check rather than an actual zoom setting.
-- **Deployment.** Nothing was deployed; see the README for static hosting and SPA fallback.
+- **Deployment.** Nothing was deployed from this environment. `vercel.json` (Vite preset, `dist` output, SPA rewrite) was written from Vercel's documented configuration but has not been exercised on Vercel itself; `vite preview` was used to verify deep links and reloads locally.
 
 A screen recording was not produced.

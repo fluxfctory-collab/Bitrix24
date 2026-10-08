@@ -46,7 +46,7 @@ No environment variables, API keys or network services are needed. The app makes
 | `npm test` | Vitest unit tests for the state machine, controller, extractor, queries and exports |
 | `npm run test:e2e` | Playwright browser tests against the production build |
 | `npm run screenshots` | Re-captures `docs/screenshots/` at 1440, 1024, 768, 390 and 360 px |
-| `npm run presentation` | Rebuilds the Arabic presentation slides (`docs/presentation/*.png` + PDF) from fresh screenshots |
+| `npm run presentation` | Rebuilds the presentation slides (`docs/presentation/*.png` + PDF) from fresh screenshots |
 | `npm run check` | lint + typecheck + unit tests + build |
 
 ## Tests
@@ -87,17 +87,29 @@ e2e/             Playwright specs and the screenshot capture script
 docs/            Scope, design system, Phase 2–4 handoff, verification, screenshots
 ```
 
-## Deployment (static hosting)
+## Deploying on Vercel
 
-`npm run build` produces a static single-page app in `dist/`. Any static host works. Because routes such as `/dashboard/calls/SAMPLE-1004` are handled in the browser, **the host must serve `index.html` for unknown paths** (SPA fallback); otherwise deep links and reloads return 404.
+The repository includes [`vercel.json`](vercel.json), so no project settings need changing:
 
-- **Netlify** — add `dist/_redirects` (or `public/_redirects` before building) containing `/*  /index.html  200`.
-- **Vercel** — `vercel.json`: `{ "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }] }`.
+1. In Vercel, **Add New → Project** and import this GitHub repository.
+2. Vercel detects **Vite**. The file sets the build command (`npm run build`) and output directory (`dist`).
+3. Leave environment variables empty — Phase 1 needs none.
+4. **Deploy.** Open `/demo` on the generated URL.
+
+`vercel.json` also rewrites every unknown path to `index.html`, so deep links and page reloads such as `/dashboard/calls/SAMPLE-1004` work, and gives the hashed files in `/assets/` a one-year immutable cache. Vercel builds with a current Node.js (22.22 or later is required by `engines`).
+
+The deployed page is public: anyone with the link can open it. That is fine for Phase 1 because it holds only fictional sample data and in-browser demo runs; real calls and customer data must wait for the access control in Phase 2.
+
+### Other static hosts
+
+`npm run build` produces a static single-page app in `dist/`. Because routes are handled in the browser, **the host must serve `index.html` for unknown paths** (SPA fallback); otherwise deep links and reloads return 404.
+
+- **Netlify** — add `public/_redirects` containing `/*  /index.html  200`.
 - **nginx** — `location / { try_files $uri $uri/ /index.html; }`.
 - **Apache** — `FallbackResource /index.html`.
 - **Caddy** — `try_files {path} /index.html`.
 
-Serve hashed files in `dist/assets/` with long-lived cache headers and `index.html` with `no-cache`. Deployment is not configured in this repository; nothing has been deployed.
+Serve hashed files in `dist/assets/` with long-lived cache headers and `index.html` with `no-cache`.
 
 ## Documentation
 
@@ -106,7 +118,7 @@ Serve hashed files in `dist/assets/` with long-lived cache headers and `index.ht
 - [Handoff for Phases 2–4](docs/HANDOFF_PHASES_2-4.md) — service contracts and connection points.
 - [Verification](docs/VERIFICATION.md) — exact commands, results and blocked checks.
 - [Screenshots](docs/screenshots/) — Demo Studio and dashboards at five widths.
-- [Presentation slides](docs/presentation/) — one designed slide per key screen with an Arabic title and description, plus `VoiceDesk-Phase1-Screens.pdf`.
+- [Presentation slides](docs/presentation/) — a cover plus one designed slide per key screen (title and short description above a framed screenshot), and `VoiceDesk-Phase1-Screens.pdf` with all of them.
 
 ## Data handling
 
