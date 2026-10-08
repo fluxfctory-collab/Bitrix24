@@ -3,7 +3,7 @@
  * Not part of the e2e suite.
  */
 import { test, type Page } from '@playwright/test'
-import { usePresenterDefaults } from './helpers'
+import { applyPresenterDefaults } from './helpers'
 
 const DIR = 'docs/screenshots'
 const WIDTHS = [1440, 1024, 768, 390, 360] as const
@@ -25,7 +25,7 @@ async function runGuided(page: Page, answers: number) {
 }
 
 test.beforeEach(async ({ page }) => {
-  await usePresenterDefaults(page)
+  await applyPresenterDefaults(page)
 })
 
 for (const width of WIDTHS) {

@@ -32,7 +32,12 @@ export default defineConfig({
     },
     {
       name: 'screenshots',
-      testMatch: /.*\.capture\.ts/,
+      testMatch: /screenshots\.capture\.ts/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      name: 'presentation',
+      testMatch: /presentation\.capture\.ts/,
       use: { ...devices['Desktop Chrome'] },
     },
   ],

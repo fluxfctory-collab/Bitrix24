@@ -1,9 +1,9 @@
 import { readFile } from 'node:fs/promises'
 import { expect, test } from '@playwright/test'
-import { usePresenterDefaults } from './helpers'
+import { applyPresenterDefaults } from './helpers'
 
 test.beforeEach(async ({ page }) => {
-  await usePresenterDefaults(page)
+  await applyPresenterDefaults(page)
 })
 
 test('overview metrics are derived from the sample sessions', async ({ page }) => {

@@ -14,6 +14,8 @@ Recorded on 2026-10-08 in a Linux container with Node.js 22.22.0, npm 10.9.4 and
 | `PW_CHROMIUM_EXECUTABLE=/opt/pw-browsers/chromium npm run test:e2e` | **23 tests passed** |
 | same, with `--repeat-each=5 --workers=3` | **115 / 115 passed**, no flaky tests |
 | `PW_CHROMIUM_EXECUTABLE=/opt/pw-browsers/chromium npm run screenshots` | 11 capture runs passed; 22 images written to `docs/screenshots/` |
+| `PW_CHROMIUM_EXECUTABLE=/opt/pw-browsers/chromium npm run presentation` | Passed; 10 slides (2880×1620 PNG) and a 10-page PDF written to `docs/presentation/` |
+| e2e suite after the Call History fix below, `--repeat-each=3 --workers=3` | **69 / 69 passed** |
 
 `npm run check` runs lint, typecheck, unit tests and build in sequence (exit 0).
 
@@ -67,6 +69,8 @@ Screenshots in `docs/screenshots/` were captured fresh from the production build
 - Demo Studio: idle and in-progress at 1440, 1024, 768, 390, 360; completed at 1440 and 390 (full page).
 - Overview at all five widths.
 - Call History, Call Detail, Agent Setup, Integrations and Settings at 1440.
+
+**Intermittent failure found and fixed:** the Call History test failed in 2 of about 20 full-suite runs. The failure snapshot showed the search box still holding "atlas" after **Reset filters**: a filter change made immediately after the reset was built from the previous render's filters and wrote the old search back into the URL. Filter and sort updates now read the current URL at call time. The race could not be reproduced on demand (it depends on render timing under load), so the fix is supported by the failure snapshot and by clean repeated runs afterwards, not by a deterministic reproduction.
 
 Issues found during review and fixed before delivery: the primary demo action falling below the fold at 1440×900 and 1366×768; the scenario control overflowing at 768 px; truncated mode labels on phones; session IDs wrapping; tables expanding the page width at 768/390/360 px (caught by the overflow test); the CRM payoff sitting below the fold after completion.
 

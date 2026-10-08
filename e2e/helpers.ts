@@ -1,7 +1,7 @@
 import type { Page } from '@playwright/test'
 
 /** Quick pacing and no speech synthesis, so tests are fast and silent. */
-export async function usePresenterDefaults(page: Page, overrides: Record<string, unknown> = {}) {
+export async function applyPresenterDefaults(page: Page, overrides: Record<string, unknown> = {}) {
   await page.addInitScript((prefs) => {
     window.localStorage.setItem('voicedesk.preferences.v1', JSON.stringify(prefs))
   }, { voicePrompts: false, pacing: 'quick', motion: 'reduce', ...overrides })

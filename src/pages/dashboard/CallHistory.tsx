@@ -68,9 +68,14 @@ export function CallHistory() {
   const searchId = useId()
   const countId = useId()
 
-  const update = (patch: Partial<CallFilters>) => setParams(filtersToParams({ ...filters, ...patch }), { replace: true })
-  const onSort = (key: SortKey) =>
-    update({ sort: key, dir: filters.sort === key ? (filters.dir === 'asc' ? 'desc' : 'asc') : key === 'company' || key === 'session' ? 'asc' : 'desc' })
+  // Read the URL at call time, not the last render: a quick change right after "Reset filters"
+  // must not write the previous filters back.
+  const latest = () => parseFilters(new URLSearchParams(window.location.search))
+  const update = (patch: Partial<CallFilters>) => setParams(filtersToParams({ ...latest(), ...patch }), { replace: true })
+  const onSort = (key: SortKey) => {
+    const current = latest()
+    update({ sort: key, dir: current.sort === key ? (current.dir === 'asc' ? 'desc' : 'asc') : key === 'company' || key === 'session' ? 'asc' : 'desc' })
+  }
 
   const all = calls.data ?? NO_CALLS
   const visible = useMemo(() => applyFilters(all, filters), [all, filters])

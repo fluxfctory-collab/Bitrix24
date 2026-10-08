@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test'
-import { usePresenterDefaults } from './helpers'
+import { applyPresenterDefaults } from './helpers'
 
 const PAGES = [
   '/demo',
@@ -16,7 +16,7 @@ const WIDTHS = [1440, 1024, 768, 720, 390, 360]
 
 for (const width of WIDTHS) {
   test(`no horizontal page scroll at ${width}px`, async ({ page }) => {
-    await usePresenterDefaults(page)
+    await applyPresenterDefaults(page)
     await page.setViewportSize({ width, height: 900 })
     for (const path of PAGES) {
       await page.goto(path)
@@ -28,7 +28,7 @@ for (const width of WIDTHS) {
 }
 
 test('every navigation item works and highlights the active route', async ({ page }) => {
-  await usePresenterDefaults(page)
+  await applyPresenterDefaults(page)
   await page.goto('/dashboard')
   const nav = page.getByRole('navigation', { name: 'Main navigation' })
   for (const [label, path] of [

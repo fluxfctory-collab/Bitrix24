@@ -46,6 +46,7 @@ No environment variables, API keys or network services are needed. The app makes
 | `npm test` | Vitest unit tests for the state machine, controller, extractor, queries and exports |
 | `npm run test:e2e` | Playwright browser tests against the production build |
 | `npm run screenshots` | Re-captures `docs/screenshots/` at 1440, 1024, 768, 390 and 360 px |
+| `npm run presentation` | Rebuilds the Arabic presentation slides (`docs/presentation/*.png` + PDF) from fresh screenshots |
 | `npm run check` | lint + typecheck + unit tests + build |
 
 ## Tests
@@ -105,6 +106,7 @@ Serve hashed files in `dist/assets/` with long-lived cache headers and `index.ht
 - [Handoff for Phases 2–4](docs/HANDOFF_PHASES_2-4.md) — service contracts and connection points.
 - [Verification](docs/VERIFICATION.md) — exact commands, results and blocked checks.
 - [Screenshots](docs/screenshots/) — Demo Studio and dashboards at five widths.
+- [Presentation slides](docs/presentation/) — one designed slide per key screen with an Arabic title and description, plus `VoiceDesk-Phase1-Screens.pdf`.
 
 ## Data handling
 

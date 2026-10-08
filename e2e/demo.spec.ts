@@ -1,10 +1,10 @@
 import { readFile } from 'node:fs/promises'
 import { expect, test } from '@playwright/test'
-import { readCapturedDetails, usePresenterDefaults, withFakeSpeech, withoutSpeechRecognition } from './helpers'
+import { readCapturedDetails, applyPresenterDefaults, withFakeSpeech, withoutSpeechRecognition } from './helpers'
 
 test.describe('Demo Studio — guided simulation', () => {
   test.beforeEach(async ({ page }) => {
-    await usePresenterDefaults(page)
+    await applyPresenterDefaults(page)
   })
 
   test('/ redirects to the demo, and the primary action is visible without scrolling', async ({ page }) => {
@@ -113,7 +113,7 @@ test.describe('Demo Studio — guided simulation', () => {
 
 test.describe('Demo Studio — browser microphone', () => {
   test.beforeEach(async ({ page }) => {
-    await usePresenterDefaults(page)
+    await applyPresenterDefaults(page)
   })
 
   test('explains unsupported recognition and offers guided simulation', async ({ page }) => {
